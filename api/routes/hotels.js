@@ -8,7 +8,7 @@ router.post("/", async(req, res) => {
     try {
         const newHotel = new Hotel(req.body)
         const savedHotel = await newHotel.save();
-        req.status(200).json(savedHotel)
+        res.status(200).json(savedHotel)
     }catch(err){
         res.status(500).json(err)
     }
@@ -18,7 +18,7 @@ router.post("/", async(req, res) => {
 router.put("/:id", async(req, res) => {
     try {
         const updatedHotel = await Hotel.findByIdAndUpdate(req.params.id, {$set: req.body}, {new:true});
-        req.status(200).json(updatedHotel)
+        res.status(200).json(updatedHotel)
     }catch(err){
         res.status(500).json(err)
     }
@@ -27,7 +27,7 @@ router.put("/:id", async(req, res) => {
 router.delete("/:id", async(req, res) => {
     try {
         await Hotel.findByIdAndDelete(req.params.id);
-        req.status(200).json("Hotel has been deleted")
+        res.status(200).json("Hotel has been deleted")
     }catch(err){
         res.status(500).json(err)
     }
@@ -37,7 +37,7 @@ router.delete("/:id", async(req, res) => {
 router.get("/:id", async(req, res) => {
     try {
         const hotel = await Hotel.findById(req.params.id);
-        req.status(200).json(hotel)
+        res.status(200).json(hotel)
     }catch(err){
         res.status(500).json(err)
     }
@@ -47,9 +47,9 @@ router.get("/:id", async(req, res) => {
 router.get("/", async(req, res) => {
     try {
         const hotels = await Hotel.find();
-        req.status(200).json(hotels)
+        res.status(200).json(hotels)
     }catch(err){
-        res.status(500).json(err)
+        res.status(200).json(err)
     }
 })
 
