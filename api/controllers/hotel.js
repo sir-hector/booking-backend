@@ -5,15 +5,15 @@ export const createHotel = async (req, res, next) => {
     try {
         const savedHotel = await newHotel.save();
         res.status(200).json(savedHotel)
-    }catch(err){
+    } catch (err) {
         next(err)
     }
 }
 export const updateHotel = async (req, res, next) => {
     try {
-        const updatedHotel = await Hotel.findByIdAndUpdate(req.params.id, {$set: req.body}, {new:true});
+        const updatedHotel = await Hotel.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
         res.status(200).json(updatedHotel)
-    }catch(err){
+    } catch (err) {
         next(err)
     }
 }
@@ -21,7 +21,7 @@ export const deletHotel = async (req, res, next) => {
     try {
         await Hotel.findByIdAndDelete(req.params.id);
         res.status(200).json("Hotel has been deleted")
-    }catch(err){
+    } catch (err) {
         next(err)
     }
 }
@@ -29,7 +29,7 @@ export const getHotel = async (req, res, next) => {
     try {
         const hotel = await Hotel.findById(req.params.id);
         res.status(200).json(hotel)
-    }catch(err){
+    } catch (err) {
         next(err)
     }
 }
@@ -37,7 +37,7 @@ export const getAllHotels = async (req, res, next) => {
     try {
         const hotels = await Hotel.find();
         res.status(200).json(hotels)
-    }catch(err){
+    } catch (err) {
         next(err)
     }
 }
@@ -46,10 +46,45 @@ export const countByCity = async (req, res, next) => {
     const cities = req.query.cities.split(",")
     try {
         const list = await Promise.all(cities.map(city => {
-            return Hotel.count({city:city})
+            return Hotel.count({ city: city })
         }))
         res.status(200).json(list)
-    }catch(err){
+    } catch (err) {
+        next(err)
+    }
+}
+
+export const countByType = async (req, res, next) => {
+    try {
+        const hotelCount = await  Hotel.countDocuments({ type: "hotel" })
+        const apartamentCount = await Hotel.countDocuments({ type: "apartament" })
+        const resortCount = await Hotel.countDocuments({ type: "resort" })
+        const villaCount = await Hotel.countDocuments({ type: "villa" })
+        const cabinCount = await Hotel.countDocuments({ type: "cabin" })
+
+        res.status(200).json([
+            {
+                type: "hotels",
+                count: hotelCount
+            },
+            {
+                type: "apartaments",
+                count: apartamentCount
+            },
+            {
+                type: "resorts",
+                count: resortCount
+            },
+            {
+                type: "villas",
+                count: villaCount
+            },
+            {
+                type: "cabins",
+                count: cabinCount
+            },
+        ])
+    } catch (err) {
         next(err)
     }
 }
